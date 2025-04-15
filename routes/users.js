@@ -9,6 +9,6 @@ router.get('/:id', isAuth, userController.getUser);
 
 router.get('/current', isAuth, userController.getCurrentUser);
 
-router.post('/:id/follow', isAuth, userController.followUser);
+router.post('/:id/follow', isAuth, userController.toggleFollowUser);
 
 module.exports = router;
