@@ -10,7 +10,22 @@ exports.getPosts = async (req, res) => {
     }
 }
 
-exports.getFollowedPosts = async (req, res) => {}
+exports.getFollowedPosts = async (req, res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.user.id,
+              },
+              include: {
+                following: true,
+              },
+        });
+        const followed = user.following
+    }
+    catch(err) {
+        return res.status(500).json({message: "Could not get followed posts."});
+    }
+}
 
 exports.getPost = async (req, res) => {
     try {
@@ -77,4 +92,56 @@ exports.deletePost = async (req, res) => {
     }
 }
 
-exports.toggleLikePost = async (req, res) => {}
+exports.toggleLikePost = async (req, res) => {
+    try {
+        const post = await prisma.post.findUnique({
+            where: {
+              id: parseInt(req.params.id),
+            },
+            include: {
+                like: true,
+              },
+          });
+          const isLike = (user) => user.id === req.user.id;
+          const likes = post.like.some(isLike);
+          if (!likes) {
+            const post = await prisma.post.update({
+                where: {
+                    id: parseInt(req.params.id),
+                  },
+                  data: {
+                    like: {
+                      connect: {
+                        id: req.user.id,
+                      },
+                    },
+                  },
+                  include: {
+                    like: true,
+                  },
+            });
+            return res.status(200).json({post});
+          }
+          else {
+            const post = await prisma.post.update({
+                where: {
+                    id: parseInt(req.params.id),
+                  },
+                  data: {
+                    like: {
+                      disconnect: {
+                        id: req.user.id,
+                      },
+                    },
+                  },
+                  include: {
+                    like: true,
+                  },
+            });
+            return res.status(200).json({post});
+          }
+    }
+    catch (error) {
+        return res.status(500).json({message: "Could not toggle like on post."});
+    }
+}
