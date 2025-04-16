@@ -7,8 +7,8 @@ router.get('/:id', isAuth, commentController.getPostComments);
 
 router.post('/:id/new', isAuth, commentController.createPostComment);
 
-router.put('/:postId/:commentId/update', isAuth, commentController.updatePostComment);
+router.put('/:id/update', isAuth, commentController.updatePostComment);
 
-router.delete('/:postId/:commentId/delete', isAuth, commentController.deletePostComment);
+router.delete('/:id/delete', isAuth, commentController.deletePostComment);
 
 module.exports = router;
