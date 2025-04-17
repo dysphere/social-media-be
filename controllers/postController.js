@@ -2,7 +2,11 @@ const prisma = require("../db/prisma");
 
 exports.getPosts = async (req, res) => {
     try {
-        const posts = await prisma.post.findMany();
+        const posts = await prisma.post.findMany({
+            orderBy: {
+                createdAt: 'asc',
+            },
+        });
         return res.status(200).json({posts});
     }
     catch(err) {
@@ -20,7 +24,16 @@ exports.getFollowedPosts = async (req, res) => {
                 following: true,
               },
         });
-        const followed = user.following
+        const followed = user.following.map((user) => user.id);
+        const posts = await prisma.post.findMany({
+            where: {
+                authorId: { in: followed},
+              },
+            orderBy: {
+                createdAt: 'asc',
+            },
+        });
+        return res.status(200).json({posts});
     }
     catch(err) {
         return res.status(500).json({message: "Could not get followed posts."});
