@@ -18,7 +18,7 @@ const validateUser = [
       }),
 ]
 
-exports.createUserPost = [ validateUser, async (req, res) => {
+exports.createUserPost = [ validateUser, async (req, res, next) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = await prisma.user.create({
@@ -29,14 +29,14 @@ exports.createUserPost = [ validateUser, async (req, res) => {
          },
        });
        const email = user.email;
-       const hash = crypto.createHash('sha256').update(trimmedEmail).digest('hex');
+       const hash = crypto.createHash('sha256').update(email).digest('hex');
        const profile = await prisma.profile.create({
         data: {
           userId: user.id,
           avatar: `https://www.gravatar.com/avatar/${hash}?s=80&d=identicon`,
         },
       });
-      return res.status(201).json(profile, user);
+      return res.status(201).json(user);
        } catch (error) {
           console.error(error);
           next(error);
@@ -44,16 +44,10 @@ exports.createUserPost = [ validateUser, async (req, res) => {
 }
 ]
 
-exports.userLoginPost = async (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(401).json({ message: info.message });
-    
-        const token = jwt.sign({ id: user.id, username: user.username }, process.env.KEY, { expiresIn: '1d' });
-    
-        return res.status(200).json({ token });
-      })(req, res, next)
-}
+exports.userLoginPost = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+})
 
 exports.userLogoutPost = async (req, res, next) => {
     req.logout((err) => {

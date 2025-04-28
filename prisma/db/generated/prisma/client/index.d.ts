@@ -7092,10 +7092,10 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
+    username?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    username?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     posts?: PostListRelationFilter
     comments?: CommentListRelationFilter
@@ -7103,7 +7103,7 @@ export namespace Prisma {
     following?: UserListRelationFilter
     profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
     liked?: PostListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
