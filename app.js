@@ -51,6 +51,7 @@ app.use(
       )
     })
   );
+  app.use(passport.initialize());
   app.use(passport.session());
 
 app.use('/', indexRouter);
@@ -63,11 +64,13 @@ passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
         const user = await prisma.user.findUnique({where: {username: username},})
-        const match = await bcrypt.compare(password, user.password);
   
         if (!user) {
           return done(null, false, { message: "Incorrect username" });
         }
+        
+        const match = await bcrypt.compare(password, user.password);
+
         if (!match) {
           return done(null, false, { message: "Incorrect password" });
         }
@@ -85,8 +88,10 @@ passport.use(
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await prisma.user.findUnique({where: {id: id}})
+      if (!user) console.log('No user found in DB for id', id);
       done(null, user);
     } catch(err) {
+      console.log('Error during deserialization:', err);
       done(err);
     }
   });

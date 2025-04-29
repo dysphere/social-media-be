@@ -44,10 +44,16 @@ exports.createUserPost = [ validateUser, async (req, res, next) => {
 }
 ]
 
-exports.userLoginPost = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-})
+exports.userLoginPost = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return next(err); }
+    if (!user) { return res.status(401).json({ message: 'Login failed' }); }
+    req.login(user, (err) => {
+      if (err) { return next(err); }
+      return res.json({ message: 'Logged in successfully' });
+    });
+  })(req, res, next);
+}
 
 exports.userLogoutPost = async (req, res, next) => {
     req.logout((err) => {

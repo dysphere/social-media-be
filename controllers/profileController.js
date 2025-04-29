@@ -33,7 +33,7 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const profile = await prisma.profile.findUnique({
+        const profile = await prisma.profile.update({
             where: {
                 id: parseInt(req.params.id),
               },

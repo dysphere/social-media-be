@@ -9,8 +9,7 @@ exports.getUsers = async (req, res) => {
         });
         return res.status(201).json({users});
        } catch (error) {
-          console.error(error);
-          next(error);
+        return res.status(500).json({message: "Could not get users."});
          }
 }
 
@@ -24,23 +23,16 @@ exports.getUser = async (req, res) => {
         return res.status(200).json({user});
     }
     catch (error) {
-      console.error(error);
-          next(error);
+      return res.status(500).json({message: "Could not get user."});
     }
 }
 
 exports.getCurrentUser = async (req, res) => {
     try {
-        const user = await prisma.user.findUnique({
-          where: {
-            id: req.user.id,
-          },
-        });
-        return res.status(200).json({user});
+        return res.status(200).json({user: req.user});
     }
     catch (error) {
-      console.error(error);
-          next(error);
+      return res.status(500).json({message: "Could not get current user."});
     }
 }
 
