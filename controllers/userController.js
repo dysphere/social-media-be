@@ -29,7 +29,12 @@ exports.getUser = async (req, res) => {
 
 exports.getCurrentUser = async (req, res) => {
     try {
-        return res.status(200).json({user: req.user});
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.user.id
+        },
+      });
+        return res.status(200).json({user});
     }
     catch (error) {
       return res.status(500).json({message: "Could not get current user."});

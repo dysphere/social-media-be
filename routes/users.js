@@ -5,9 +5,9 @@ const userController = require('../controllers/userController');
 
 router.get('/', isAuth, userController.getUsers);
 
-router.get('/:id', isAuth, userController.getUser);
-
 router.get('/current', isAuth, userController.getCurrentUser);
+
+router.get('/:id', isAuth, userController.getUser);
 
 router.post('/:id/follow', isAuth, userController.toggleFollowUser);
 
