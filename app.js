@@ -24,7 +24,7 @@ const commentsRouter = require('./routes/comments');
 
 app.use(logger('dev'));
 app.use(cors({
-    origin: 'http://localhost:5173', 
+    origin: 'https://localhost:5173', 
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
