@@ -137,3 +137,4 @@ dist
 
 # Generated prisma client
 generated/prisma/
+prisma/db/generated/prisma/client

@@ -194,7 +194,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://lillian:jCY865P2hxnYSHx8XR64W4KcWTN0JjhI@dpg-d099b9pr0fns738paf1g-a.oregon-postgres.render.com/social_media_db_s0p0"
+        "value": "postgresql://lillian:PMG9nYGLxPlZvUUQQB860jA99t0gw4JZ@dpg-d0de642dbo4c738f1q90-a.oregon-postgres.render.com/social_media_db_rpqs"
       }
     }
   },
