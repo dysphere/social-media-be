@@ -24,7 +24,7 @@ const commentsRouter = require('./routes/comments');
 
 app.use(logger('dev'));
 app.use(cors({
-    origin: 'https://localhost:5173', 
+    origin: 'https://my-social-frontend.loca.lt', 
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
