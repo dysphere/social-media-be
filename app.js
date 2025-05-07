@@ -37,8 +37,9 @@ app.use(
     session({
       cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // ms
-      secure: false, 
-      sameSite: 'lax',
+      secure: true,
+      httpOnly: true,
+      sameSite: 'none',
       },
       secret: 'imported mundane prefer taste nappy',
       resave: true,
