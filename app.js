@@ -36,7 +36,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
     session({
       cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+      maxAge: 7 * 24 * 60 * 60 * 1000, // ms
+      secure: false, 
+      sameSite: 'lax',
       },
       secret: 'imported mundane prefer taste nappy',
       resave: true,
