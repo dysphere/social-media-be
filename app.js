@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors')
 const createError = require('http-errors');
@@ -9,6 +10,7 @@ const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const bcrypt = require("bcryptjs");
+const isProduction = process.env.NODE_ENV === 'production';
 
 const app = express();
 
@@ -37,13 +39,13 @@ app.use(
     session({
       cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // ms
-      secure: true,
+      secure: isProduction,
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: isProduction ? 'none' : 'lax',
       },
-      secret: 'imported mundane prefer taste nappy',
-      resave: true,
-      saveUninitialized: true,
+      secret: process.env.SESSION_SECRET || 'dev-secret',
+      resave: false,
+      saveUninitialized: false,
       store: new PrismaSessionStore(
         prisma,
         {
