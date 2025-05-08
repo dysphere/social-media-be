@@ -24,10 +24,10 @@ const commentsRouter = require('./routes/comments');
 
 app.use(logger('dev'));
 app.use(cors({
-    origin: 'https://my-social-frontend.loca.lt', 
+  origin: 'http://localhost:5173',
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
-    credentials: true
+    credentials: true,
   }));
   app.options('*', cors());
 app.use(express.json());
@@ -39,9 +39,9 @@ app.use(
     session({
       cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // ms
-      secure: true,                     
-      httpOnly: true,
-      sameSite: 'none',
+      secure: false,               
+    httpOnly: true,
+    sameSite: 'lax', 
       },
       secret: process.env.SESSION_SECRET || 'dev-secret',
       resave: false,
