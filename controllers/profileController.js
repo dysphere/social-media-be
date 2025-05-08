@@ -1,15 +1,5 @@
 const prisma = require("../db/prisma");
 
-exports.getProfiles = async (req, res) => {
-    try {
-        const profiles = await prisma.profile.findMany();
-        return res.status(200).json({profiles});
-    }
-    catch(err) {
-        return res.status(500).json({message: "Could not get profile."});
-    }
-}
-
 exports.getProfile = async (req, res) => {
     try {
         const profile = await prisma.profile.findUnique({

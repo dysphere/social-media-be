@@ -6,6 +6,9 @@ exports.getUsers = async (req, res) => {
             orderBy: {
                 id: 'asc',
             },
+            include: {
+              profile: true,
+            },
         });
         return res.status(201).json({users});
        } catch (error) {
@@ -18,6 +21,9 @@ exports.getUser = async (req, res) => {
         const user = await prisma.user.findUnique({
           where: {
             id: parseInt(req.params.id),
+          },
+          include: {
+            profile: true,
           },
         });
         return res.status(200).json({user});
