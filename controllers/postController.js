@@ -48,8 +48,12 @@ exports.getPost = async (req, res) => {
               },
               include: {
                 author: true, 
-                comment: true,
                 like: true,
+                comment: {
+                  include: {
+                    author: true,
+                  }
+                }
               },
         });
         return res.status(200).json({post});
