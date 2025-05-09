@@ -21,10 +21,20 @@ model User {
   password String
   posts   Post[]   @relation("Author")
   comments Comment[]
-  followedBy User[]  @relation("UserFollows")
-  following  User[]  @relation("UserFollows")
+  following  Follow[] @relation("Followee")
+  followedBy Follow[] @relation("Follower")
   profile Profile?
   liked Post[] @relation("LikedUser")
+}
+
+model Follow {
+  followerId Int
+  followeeId Int
+
+  follower   User @relation("Follower", fields: [followerId], references: [id])
+  followee   User @relation("Followee", fields: [followeeId], references: [id])
+
+  @@id([followerId, followeeId]) // Composite primary key
 }
 
 model Profile {

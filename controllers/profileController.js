@@ -9,6 +9,7 @@ exports.getProfile = async (req, res) => {
               include: {
                 user: {
                   include: {
+                    followedBy: true,
                     posts: {
                         include: {
                             like: true,
