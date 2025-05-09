@@ -34,6 +34,11 @@ exports.getFollowedPosts = async (req, res) => {
       orderBy: {
         createdAt: 'asc', 
       },
+      include: {
+        author: true,
+        comment: true,
+        like: true,
+      }
     });
 
     return res.status(200).json({ posts });
