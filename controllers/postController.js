@@ -15,29 +15,32 @@ exports.getPosts = async (req, res) => {
 }
 
 exports.getFollowedPosts = async (req, res) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                id: req.user.id,
-              },
-              include: {
-                following: true,
-              },
-        });
-        const followed = user.following.map((user) => user.id);
-        const posts = await prisma.post.findMany({
-            where: {
-                authorId: { in: followed},
-              },
-            orderBy: {
-                createdAt: 'asc',
-            },
-        });
-        return res.status(200).json({posts});
-    }
-    catch(err) {
-        return res.status(500).json({message: "Could not get followed posts."});
-    }
+  try {
+    const follows = await prisma.follow.findMany({
+      where: {
+        followerId: req.user.id,
+      },
+      select: {
+        followeeId: true,
+      },
+    });
+
+    const followedUserIds = follows.map(f => f.followeeId);
+
+    const posts = await prisma.post.findMany({
+      where: {
+        authorId: { in: followedUserIds },
+      },
+      orderBy: {
+        createdAt: 'asc', 
+      },
+    });
+
+    return res.status(200).json({ posts });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Could not get followed posts.' });
+  }
 }
 
 exports.getPost = async (req, res) => {
