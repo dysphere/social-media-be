@@ -39,6 +39,9 @@ exports.getCurrentUser = async (req, res) => {
         where: {
           id: req.user.id
         },
+        include: {
+          profile: true,
+        }
       });
         return res.status(200).json({user});
     }
