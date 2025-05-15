@@ -9,9 +9,16 @@ exports.getProfile = async (req, res) => {
               include: {
                 user: {
                   include: {
-                    followedBy: {
+                    following: {
                       include: {
                         follower: true, 
+                        followee: true,
+                      },
+                    },
+                    followedBy: {
+                      include: {
+                        followee: true, 
+                        follower: true,
                       },
                     },
                     posts: {
