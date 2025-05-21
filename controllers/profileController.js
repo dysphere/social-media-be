@@ -31,7 +31,17 @@ exports.getProfile = async (req, res) => {
                 },
               },
         });
-        return res.status(200).json({profile});
+        const followExists = await prisma.follow.findUnique({
+          where: {
+            followerId_followeeId: {
+              followerId: req.user.id,
+              followeeId: parseInt(req.params.id),
+            },
+          },
+        });
+        const isFollowing = !!followExists;
+        return res.status(200).json({profile,
+          isFollowing});
     }
     catch(err) {
         return res.status(500).json({message: "Could not get profile."});

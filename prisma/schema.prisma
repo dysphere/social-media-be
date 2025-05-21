@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "db/generated/prisma/client"
@@ -15,45 +9,44 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  username    String  @unique
-  password String
-  posts   Post[]   @relation("Author")
-  comments Comment[]
-  following  Follow[] @relation("Followee")
-  followedBy Follow[] @relation("Follower")
-  profile Profile?
-  liked Post[] @relation("LikedUser")
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  username   String    @unique
+  password   String
+  comments   Comment[]
+  following  Follow[]  @relation("Followee")
+  followedBy Follow[]  @relation("Follower")
+  posts      Post[]    @relation("Author")
+  profile    Profile?
+  liked      Post[]    @relation("LikedUser")
 }
 
 model Follow {
   followerId Int
   followeeId Int
-
-  follower   User @relation("Follower", fields: [followerId], references: [id])
   followee   User @relation("Followee", fields: [followeeId], references: [id])
+  follower   User @relation("Follower", fields: [followerId], references: [id])
 
-  @@id([followerId, followeeId]) // Composite primary key
+  @@id([followerId, followeeId])
 }
 
 model Profile {
   id     Int     @id @default(autoincrement())
-  avatar String? 
-  bio    String @default("Empty bio here")
-  user   User    @relation(fields: [userId], references: [id])
+  avatar String?
+  bio    String  @default("Empty bio here")
   userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  content   String  @db.VarChar(255)
-  author  User @relation("Author", fields: [authorId], references: [id])
-  authorId Int
-  comment Comment[]
-  like  User[]  @relation("LikedUser")
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  content   String    @db.VarChar(255)
+  authorId  Int
+  comment   Comment[]
+  author    User      @relation("Author", fields: [authorId], references: [id])
+  like      User[]    @relation("LikedUser")
 }
 
 model Comment {
@@ -61,15 +54,15 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   content   String   @db.VarChar(255)
-  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
-  post     Post  @relation(fields: [postId], references: [id])
-  postId  Int
+  postId    Int
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
 }
 
 model Session {
   id        String   @id
   sid       String   @unique
-  data      String   
-  expiresAt   DateTime
+  data      String
+  expiresAt DateTime
 }

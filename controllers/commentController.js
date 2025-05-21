@@ -20,6 +20,9 @@ exports.createPostComment = async (req, res) => {
               authorId: req.user.id,
               postId: parseInt(req.params.id),
             },
+            include: {
+                author: true,
+            }
           });
           return res.status(200).json({comment});
     }
