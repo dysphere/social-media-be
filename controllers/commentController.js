@@ -4,6 +4,9 @@ exports.getPostComments = async (req, res) => {
     try {
         const comments = await prisma.comment.findMany({
             where: {postId: parseInt(req.params.id)},
+             orderBy: {
+                id: 'asc',
+            },
         });
         return res.status(200).json({comments});
     }

@@ -60,7 +60,10 @@ exports.getPost = async (req, res) => {
                 comment: {
                   include: {
                     author: true,
-                  }
+                  },
+                   orderBy: {
+                    id: 'asc',
+                },
                 }
               },
         });
