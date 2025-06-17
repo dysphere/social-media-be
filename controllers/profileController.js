@@ -1,4 +1,5 @@
 const prisma = require("../db/prisma");
+const { uploadToCloudinary } = require("../storage/cloudinary_config");
 
 exports.getProfile = async (req, res) => {
     try {
@@ -63,4 +64,21 @@ exports.updateProfile = async (req, res) => {
     catch(err) {
         return res.status(500).json({message: "Could not get profile."});
     }
+}
+
+exports.uploadPic = async (req, res) => {
+   try {
+        const picUrl = await uploadToCloudinary(req.file.path);
+        const profile = await prisma.profile.update({
+          where: {
+            id: parseInt(req.params.id),
+          },
+          data: {
+            avatar: picUrl,
+          },
+        });
+        return res.status(200).json({profile});
+       } catch (error) {
+          console.error(error);
+         }
 }
